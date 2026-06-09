@@ -1,9 +1,0 @@
-## Core build artifacts
-bin/
-obj/
-
-## VS Code settings tracker
-.vscode/
-
-## Local configuration secrets overrides
-appsettings.Development.json
