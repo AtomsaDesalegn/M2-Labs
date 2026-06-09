@@ -1,22 +1,35 @@
-import { Temporal } from "@js-temporal/polyfill";
+import { Quiz, LabAssignment, AssessmentItem, calculateGrade } from "./models/assessment.model";
 
-// 1. Record the exact moment an enrollment is approved (UTC)
-const approvedAt = Temporal.Now.instant();
-console.log(`Approved at (UTC): ${approvedAt}`);
-// 2. Display in local timezone
-const addisTime = approvedAt.toZonedDateTimeISO("Africa/Addis_Ababa");
-const londonTime = approvedAt.toZonedDateTimeISO("Europe/London");
-console.log(`Addis: ${addisTime.toPlainTime()}`);
-console.log(`London: ${londonTime.toPlainTime()}`);
-// Same moment, different wall-clock time
-// 3. Course start date (date only, no time)
-const courseStart = Temporal.PlainDate.from("2026-09-01");
-const today = Temporal.Now.plainDateISO();
-const daysUntilStart = today.until(courseStart).total({ unit: "days" });
-console.log(`${Math.floor(daysUntilStart)} days until course starts`);
-// 4. Assignment deadline duration
-const deadline = Temporal.PlainDate.from("2026-12-15");
-const remaining = today.until(deadline);
-console.log(
-  `${remaining.total({ unit: "days" })} days until assignment is due`,
-);
+console.log("==================================================");
+console.log("   TMS MODULE 2 SESSION 2: ASSESSMENT ENGINE      ");
+console.log("==================================================\n");
+
+// 1. Create a sample Quiz dataset matching your interface
+const sampleQuiz: Quiz = {
+  id: "QZ-101",
+  kind: "quiz",
+  title: "C# Basics & Type Safety",
+  correctAnswers: 8,
+  totalQuestions: 10
+};
+
+// 2. Create a sample LabAssignment dataset matching your interface
+const sampleLab: LabAssignment = {
+  id: "LAB-101",
+  kind: "lab",
+  title: "Asynchronous Programing Lab",
+  functionalityScore: 90,
+  codeQualityScore: 85
+};
+
+// 3. Collect them into a type-safe Discriminated Union Array
+const gradebook: AssessmentItem[] = [sampleQuiz, sampleLab];
+
+// 4. Process and print grades safely using your calculation utility
+gradebook.forEach((item) => {
+  const finalGrade = calculateGrade(item);
+  
+  console.log(`[${item.kind.toUpperCase()}] Title: ${item.title}`);
+  console.log(`Computed Score: ${finalGrade}%`);
+  console.log("--------------------------------------------------");
+});
